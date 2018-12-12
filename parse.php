@@ -61,6 +61,7 @@ class Report {
 			foreach ($source as $link) {
 				$i++;
 				fwrite($f, $link.PHP_EOL);
+				fwrite($f, "и другие".PHP_EOL);
 				if($i>$this->countLinks) break;
 			}
 			fwrite($f, PHP_EOL);

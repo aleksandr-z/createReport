@@ -1,9 +1,8 @@
 <?php
-//$file = fopen('./server_error_(5xx)_inlinks.csv', 'r');
-
-
 class Report {
 	private $file;
+	private $fileout;
+	private $countLinks;
 	private $destination = "";
 	private $source = Array();
 	private $listing = Array(); 
@@ -13,7 +12,13 @@ class Report {
 	private function replace($str){
 		return str_replace('"', '', $str);
 	}
+	private function outFile($filename){
+		$fileinfo = pathinfo($filename);
+		return $fileinfo['filename'].".txt";
+;	}
 	private function parse($filename){
+		$this->fileout = $this->outFile($filename);
+		$this->countLinks = isset($argv[2])?$argv[2]:50;
 		$file = fopen($filename, 'r');
 		while(!feof($file)){			
 			$buffer = fgets($file, 4096);
@@ -49,17 +54,22 @@ class Report {
 	}
 
 	private function printListing(){
+		$f = fopen($this->fileout, 'w');
 		foreach ($this->listing as $key => $source) {
-			echo $key.PHP_EOL."на страницах".PHP_EOL;
+			fwrite($f, $key.PHP_EOL."на страницах".PHP_EOL);
+			$i = 0;
 			foreach ($source as $link) {
-				echo $link.PHP_EOL;
+				$i++;
+				fwrite($f, $link.PHP_EOL);
+				if($i>$this->countLinks) break;
 			}
-			echo PHP_EOL;
+			fwrite($f, PHP_EOL);
 		}
+		fclose($f);
 	}
 }
 
-new Report('./server_error_(5xx)_inlinks.csv');
+new Report($argv[1]);
 
 
 ?>

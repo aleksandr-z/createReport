@@ -24,10 +24,6 @@ class Report {
 			
 		}
 
-		var_dump($this->options);
-		// if(!isset($this->options['path']) || $this->options['path']==''){
-		// 	$this->options['path'] = __DIR__;
-		// }
 
 		$this->options['path'] = $this->checkPath($this->options['path']);
 		if(isset($this->options['file']) && $this->options['file']==''){
@@ -54,7 +50,6 @@ class Report {
 			$files = scandir($this->options['path']);
 			foreach ($files as $key => $value) {
 				$fileinfo = pathinfo($value);
-				var_dump($fileinfo);
 				if($fileinfo['extension']=="csv") array_push($this->arrFiles, $value);
 			}
 		}else{
